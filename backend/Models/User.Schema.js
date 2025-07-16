@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import validator from 'validator';
+import bcrypt from "bcrypt";
 
 
 const UserSchema=new mongoose.Schema({
@@ -26,7 +27,7 @@ const UserSchema=new mongoose.Schema({
         required:true,
     },
 
-    prefernce:{
+    preference:{
         first_preference:String,
         second_preference:String,
         third_preference:String,
@@ -59,6 +60,10 @@ createdAt: {
     }
 
 );
+
+UserSchema.methods.comparePassword = async function (enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password);
+};
 
 export const User=mongoose.model("Users",UserSchema)
 

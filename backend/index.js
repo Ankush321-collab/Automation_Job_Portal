@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import userrouter from './routes/user.route.js'
+import jobrouter from './routes/job.route.js'
 import fileUpload from "express-fileupload";
 import fs from 'fs';
 console.log("CWD:", process.cwd());
@@ -35,6 +36,7 @@ app.use(
   })
 );
 app.use('/api',userrouter)
+app.use('/api',jobrouter)
 app.get("/", (req, res) => {
   res.send("Hello from backend");
 });
