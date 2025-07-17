@@ -19,7 +19,8 @@ const UserSchema=new mongoose.Schema({
     phone:{
         type:String,
         required:true,
-        length:[10,"cannot exceed lenght 10"]
+        minlength:[10,"Phone number must be 10 digits"],
+        maxlength:[10,"Phone number must be 10 digits"]
     },
 
     address:{
@@ -39,8 +40,8 @@ const UserSchema=new mongoose.Schema({
     },
 
 resume:{
-    public_id:String,
-    url:String,
+    public_id:{ type: String, default: "" },
+    url:{ type: String, default: "" },
 },
 coverletter:{
     type:String,
@@ -68,4 +69,6 @@ UserSchema.methods.comparePassword = async function (enteredPassword) {
 export const User=mongoose.model("Users",UserSchema)
 
 //this is for hasing password
+
+// Note: If you want to use 'fullname' as 'name' in application logic, map it in the controller when needed.
 
