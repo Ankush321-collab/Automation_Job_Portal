@@ -8,6 +8,7 @@ import userrouter from './routes/user.route.js'
 import jobrouter from './routes/job.route.js'
 import fileUpload from "express-fileupload";
 import fs from 'fs';
+import { newsLetterCron } from './automation/newsLetterCorns.js';
 console.log("CWD:", process.cwd());
 console.log(".env exists:", fs.existsSync('.env')); 
 console.log("fileUpload:", fileUpload);
@@ -42,6 +43,7 @@ app.use('/api',applicationrouter)
 app.get("/", (req, res) => {
   res.send("Hello from backend");
 });
+newsLetterCron();
 
 const mongoUrl = process.env.MONGO_URL;
 const dbName = "Job_Portal_Automation";
