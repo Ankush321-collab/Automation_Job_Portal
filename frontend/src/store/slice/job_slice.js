@@ -75,17 +75,17 @@ const jobSlice=createSlice({
   
       requestForMyJobs(state, action) {
         state.loading = true;
-        state.myJobs = [];
+        state.myjob = [];
         state.error = null;
       },
       successForMyJobs(state, action) {
         state.loading = false;
-        state.myJobs = action.payload;
+        state.myjob = action.payload;
         state.error = null;
       },
       failureForMyJobs(state, action) {
         state.loading = false;
-        state.myJobs = state.myJobs;
+        state.myjob = state.myjob;
         state.error = action.payload;
       },
   
@@ -98,9 +98,101 @@ const jobSlice=createSlice({
         state.jobs = state.jobs;
         state.loading = false;
         state.message = null;
-        state.myJobs = state.myJobs;
-        state.singleJob = {};
+        state.myjob = state.myjob;
+        state.singlejob = {};
       },
     },
 
 });
+
+export const fetchjobs=
+(city,preference,keyword = "")=>
+  async(dispatch)=>{
+
+    try{
+      dispatch(jobSlice.actions.requestforalljobs());
+      let link="http://localhost:5000/api/getalljobs?"
+      let query=[];
+      if(keyword){
+        query.push(`keyword=${keyword}`)
+      }
+      if(city){
+        query.push(`city=${city}`)
+      }
+      if (preference) {
+        query.push(`preference=${preference}`)
+      }
+
+      link+=query.join("&")
+      const response=await axios.get(link,{
+        withCredentials:true,
+      });
+      dispatch(jobSlice.actions.successforalljob(response.data.jobs))
+      dispatch(jobSlice.actions.clearAllErrors())
+
+
+
+    }
+    catch(error){
+      dispatch(jobSlice.actions.failurforalljobs(error.response.data.message));
+
+    }
+
+  }
+  export const fetchsinglejon=(jobid)=>async(dispatch)=>{
+    dispatch(jobSlice.actions.requestforsinglejob());
+    try{
+      const response=await axios.get(`http://localhost:5000/api/get/${jobid}`,{
+        withCredentials:true,
+      })
+      dispatch(jobSlice.actions.successforsinglejob(response.data.job))
+      dispatch(jobSlice.actions.clearAllErrors());
+
+    }
+    catch(error){
+      dispatch(jobSlice.actions.failurforsinglejob(error.response.data.message));
+
+    }
+
+  }
+
+  export const postjob=(data)=>async(dispatch)=>{
+    dispatch(jobSlice.actions.requestForPostJob());
+
+    try{
+      const response=await axios.post(`http://localhost:5000/api/postjob`,data,{
+        withCredentials:true,
+        headers:{"Content-Type":"application/json"}
+      })
+      dispatch(jobSlice.actions.successForPostJob(response.data.message));
+
+    }
+    catch(error){
+      dispatch(jobSlice.actions.failureForPostJob(error.response.data.message));
+
+    }
+  }
+
+  export const getmyjob=()=>async(dispatch)=>{
+    dispatch(jobSlice.actions.requestForMyJobs());
+    try {
+      const response = await axios.get(
+        `https://job-portal-backend-sifx.onrender.com/api/v1/job/getmyjobs`,
+        { withCredentials: true }
+      );
+      dispatch(jobSlice.actions.successForMyJobs(response.data.myJobs));
+      dispatch(jobSlice.actions.clearAllErrors());
+    } catch (error) {
+      dispatch(jobSlice.actions.failureForMyJobs(error.response.data.message));
+    }
+  };
+  export const clearAllJobErrors = () => (dispatch) => {
+    dispatch(jobSlice.actions.clearAllErrors());
+  };
+
+  
+  export const resetJobSlice=()=>(dispatch)=>{
+    dispatch(jobSlice.actions.resetJobSlice())
+  }
+
+  export default jobSlice.reducer;
