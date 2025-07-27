@@ -28,9 +28,10 @@ export const signup = catchasyncerror(async (req, res, next) => {
   if (!password) missingFields.push("password");
   if (!confirmpassword) missingFields.push("confirmpassword");
   if (!role) missingFields.push("role");
-  if (!coverletter) missingFields.push("coverletter");
 
+  // Only require coverletter and preferences for job seekers
   if (role === "job seeker") {
+    if (!coverletter) missingFields.push("coverletter");
     if (!first_preference) missingFields.push("first_preference");
     if (!second_preference) missingFields.push("second_preference");
     if (!third_preference) missingFields.push("third_preference");

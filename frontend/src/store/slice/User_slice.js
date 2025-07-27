@@ -46,7 +46,10 @@ const userSlice=createSlice({
         loginsuccess(state,action){
             state.loading=false;
             state.isAuthenticated=true;
-            state.user=action.payload.user;
+            state.user={
+                ...action.payload.user,
+                token: action.payload.token
+            };
             state.error=null;
             state.message=action.payload.message;
         },
@@ -104,11 +107,18 @@ export const signup=(data)=>async(dispatch)=>{
     dispatch(userSlice.actions.requestforregister());
 
     try{
-        const response=await axios.post("http://localhost:5000/api/signup",data,
-            {
-                withCredentials:true,
-                headers:{"Content-Type":"multipart/form-data"}
+        const config = {
+            withCredentials: true,
+            headers: {
+                "Content-Type": "multipart/form-data",
+                "Accept": "application/json"
             }
+        };
+        
+        const response = await axios.post(
+            "http://localhost:5000/api/signup",
+            data,
+            config
         );
         dispatch(userSlice.actions.successforregister(response.data));
         dispatch(userSlice.actions.clearallerror());
