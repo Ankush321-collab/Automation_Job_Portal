@@ -1,0 +1,19 @@
+.navbar-logo-rounded, .footer-logo-rounded {
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  border: 2px solid #eee;
+  background: #fff;
+}
+
+.navbar-logo-rounded {
+  height: 50px;
+  width: 50px;
+  margin-right: 10px;
+}
+
+.footer-logo-rounded {
+  height: 80px;
+  width: 80px;
+  margin-bottom: 10px;
+}

@@ -1,5 +1,8 @@
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { useState, useEffect } from 'react'
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
+import { useSelector } from 'react-redux';
 import Home from './pages/Home'
 import Login from './pages/Login'
 import { Signup } from './pages/Signup'
@@ -10,30 +13,39 @@ import { PostApplication } from './pages/postApplication'
 import Navbar from './Components/Navbar'
 import Footer from './Components/Footer'
 import "./App.css"
-import { useSelector } from 'react-redux';
+
+
 
 function App() {
-  const isAuthenticated = useSelector(state => state.user.isAuthenticated);
+  const location = useLocation();
   const navigate = useNavigate();
 
+  const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
+
   useEffect(() => {
-    if (!isAuthenticated) {
-      navigate('/login');
+    const publicRoutes = ['/login', '/signup', '/'];
+    const isPublicRoute = publicRoutes.includes(location.pathname);
+
+    if (!isAuthenticated && !isPublicRoute && location.pathname !== '/login') {
+      navigate('/login', { replace: true });
+    } else if (isAuthenticated && location.pathname === '/login') {
+      navigate('/', { replace: true });
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, location.pathname, navigate]);
 
 
   return (
     <>
       <Navbar />
+      <ToastContainer />
       <Routes>
-        <Route path='/' element={<Home/>}/>
+        <Route path='/' element={isAuthenticated?<Home/>:<Login/>}/>
         <Route path='/signup' element={<Signup/>}/>
         <Route path='/login' element={<Login/>}/>
         <Route path='/notfound' element={<Notfound/>}/>
-        <Route path='/dashboard' element={<Dashboard/>}/>
-        <Route path='/application' element={<PostApplication/>}/>
-        <Route path='/job' element={<Job/>}/>
+        <Route path='/dashboard' element={isAuthenticated?  <Dashboard/>:<Login/>}/>
+        <Route path='/application' element={isAuthenticated?  <PostApplication/>:<Login/>}/>
+        <Route path='/job' element={isAuthenticated?<Job/>:<Login/>}/>
         <Route path="*" element={<Notfound/>}/>
       </Routes>
       <Footer/>
@@ -42,4 +54,3 @@ function App() {
 }
 
 export default App
-

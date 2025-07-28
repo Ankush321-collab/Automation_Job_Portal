@@ -82,6 +82,20 @@ export const Signup = () => {
 
   const handleRegister = (e) => {
     e.preventDefault();
+    // Client-side validation
+    const requiredFields = ['fullname', 'role', 'email', 'phone', 'address', 'password', 'confirmpassword'];
+    for (const field of requiredFields) {
+      if (!formData[field] || (typeof formData[field] === 'string' && formData[field].trim() === '')) {
+        toast.dismiss();
+        toast.error('Please fill in all required fields.');
+        return;
+      }
+    }
+    if (formData.password !== formData.confirmpassword) {
+      toast.dismiss();
+      toast.error('Passwords do not match.');
+      return;
+    }
     const data = new FormData();
     Object.entries(formData).forEach(([key, value]) => {
       if (key === "resume" && value) {

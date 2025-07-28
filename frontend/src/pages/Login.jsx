@@ -1,104 +1,151 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
-import { clearAllUserErrors, login } from "../store/slice/User_slice";
-import { toast } from "react-toastify";
-import { FaRegUser } from "react-icons/fa";
-import { MdOutlineMailOutline } from "react-icons/md";
-import { RiLock2Fill } from "react-icons/ri";
+import React, { useState, useEffect } from 'react';
+import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
+import { useNavigate, Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { login, clearAllUserErrors } from '../store/slice/User_slice';
+import { toast } from 'react-toastify';
 
 const Login = () => {
-  const [role, setRole] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const { loading, isAuthenticated, error } = useSelector(
-    (state) => state.user
-  );
-
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const navigateTo = useNavigate();
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    const formData = new FormData();
-    formData.append("role", role);
-    formData.append("email", email);
-    formData.append("password", password);
-    dispatch(login(formData));
+  const { loading, error, isAuthenticated, user } = useSelector((state) => state.user);
+
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+    role: ''
+  });
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  // Handle form input change
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
-  const user = useSelector((state) => state.user.user);
-
-  useEffect(() => {
-    if (isAuthenticated && user) {
-      localStorage.setItem("user", JSON.stringify(user));
-      localStorage.setItem("token", user.token);
-      navigateTo("/");
+  // Handle form submit
+  const handleLogin = (e) => {
+    e.preventDefault();
+    // Client-side validation
+    if (!formData.role || !formData.email || !formData.password) {
+      toast.dismiss();
+      toast.error('Please fill in all fields.');
+      return;
     }
-  }, [isAuthenticated, user, navigateTo]);
+    dispatch(login(formData));
+  }
 
+  // Handle error notification
   useEffect(() => {
     if (error) {
-      toast.error(error);
-      dispatch(clearAllUserErrors());
+      // Show toast and only clear error after toast closes
+      toast.error(error, {
+        onClose: () => dispatch(clearAllUserErrors())
+      });
     }
-    if (isAuthenticated) {
-      navigateTo("/");
+  }, [error, dispatch]);
+
+  // Redirect after successful login
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      localStorage.setItem('user', JSON.stringify(user));
+      localStorage.setItem('token', user.token);
+      navigate('/', { replace: true });
     }
-  }, [dispatch, error, loading, isAuthenticated, navigateTo]);
+  }, [isAuthenticated, user, navigate]);
 
   return (
-    <>
-      <section className="authPage">
-        <div className="container login-container">
-          <div className="header">
-            <h3>Login to your account</h3>
-          </div>
-          <form onSubmit={handleLogin}>
-            <div className="inputTag">
-              <label>Login As</label>
-              <div>
-                <select value={role} onChange={(e) => setRole(e.target.value)}>
-                  <option value="">Select Role</option>
-                  <option value="employer">Login as an Employer</option>
-                  <option value="job seeker">Login as a Job Seeker</option>
-                </select>
-                <FaRegUser />
-              </div>
-            </div>
-            <div className="inputTag">
-              <label>Email</label>
-              <div>
-                <input
-                  type="email"
-                  placeholder="youremail@gmail.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-                <MdOutlineMailOutline />
-              </div>
-            </div>
-            <div className="inputTag">
-              <label>Password</label>
-              <div>
-                <input
-                  type="password"
-                  placeholder="Your Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-                <RiLock2Fill />
-              </div>
-            </div>
-            <button type="submit" disabled={loading}>
-              Login
-            </button>
-            <Link to={"/register"}>Register Now</Link>
-          </form>
+    <section className="authPage">
+      <div className="container login-container">
+        <div className="header">
+          <h3>Login to your account</h3>
         </div>
-      </section>
-    </>
+        <form onSubmit={handleLogin}>
+          {/* Role Selector */}
+          <div className="inputTag">
+            <label>Login As</label>
+            <div>
+              <select
+                value={formData.role}
+                onChange={handleChange}
+                name="role"
+                required
+              >
+                <option value="">Select Role</option>
+                <option value="employer">Login as an Employer</option>
+                <option value="job seeker">Login as a Job Seeker</option>
+              </select>
+            </div>
+          </div>
+
+          {/* Email Input */}
+          <div className="inputTag">
+            <label>Email</label>
+            <div>
+              <input
+                type="email"
+                placeholder="youremail@gmail.com"
+                value={formData.email}
+                onChange={handleChange}
+                name="email"
+                required
+              />
+            </div>
+          </div>
+
+          {/* Password Input */}
+          <div className="inputTag">
+            <label>Password</label>
+            <div style={{ position: 'relative', width: '100%' }}>
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Your Password"
+                value={formData.password}
+                onChange={handleChange}
+                name="password"
+                required
+                style={{ width: '100%' }}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="login-password-toggle"
+                tabIndex={-1}
+                style={{
+                  position: 'absolute',
+                  right: 8,
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  background: 'none',
+                  border: 'none',
+                  padding: 0,
+                  cursor: 'pointer'
+                }}
+              >
+                {showPassword ? (
+                  <AiOutlineEyeInvisible size={20} />
+                ) : (
+                  <AiOutlineEye size={20} />
+                )}
+              </button>
+            </div>
+          </div>
+
+          {/* Submit Button */}
+          <button type="submit" disabled={loading}>
+            {loading ? "Logging in..." : "Login"}
+          </button>
+
+          {/* Register Link */}
+          <Link to="/register">Register Now</Link>
+        </form>
+      </div>
+    </section>
   );
 };
 

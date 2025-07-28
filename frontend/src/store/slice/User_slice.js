@@ -162,20 +162,12 @@ export const login = (data) => async (dispatch) => {
       dispatch(userSlice.actions.fetchuserfailure(error.response.data.message));
     }
   };
-  export const logout = () => async (dispatch) => {
-    try {
-      const response = await axios.get(
-        "http://localhost:5000/api/logout",
-        {
-          withCredentials: true,
-        }
-      );
-      dispatch(userSlice.actions.logoutsuccess());
-      dispatch(userSlice.actions.clearallerror());
-    } catch (error) {
-      dispatch(userSlice.actions.logoutfailed(error.response.data.message));
-    }
-  };
+  export const logout = () => (dispatch) => {
+  localStorage.removeItem('user');
+  localStorage.removeItem('token');
+  dispatch(userSlice.actions.logoutsuccess());
+  dispatch(userSlice.actions.clearallerror());
+};
   
   export const clearAllUserErrors = () => (dispatch) => {
     dispatch(userSlice.actions.clearallerror());
