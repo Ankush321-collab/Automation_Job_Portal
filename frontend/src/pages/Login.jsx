@@ -1,63 +1,64 @@
 import React, { useState, useEffect } from 'react';
-import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
-import { useNavigate, Link } from 'react-router-dom';
+import { MdOutlineMailOutline, MdCategory } from 'react-icons/md';
+import { RiLock2Fill } from 'react-icons/ri';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { login, clearAllUserErrors } from '../store/slice/User_slice';
 import { toast } from 'react-toastify';
-
-const Login = () => {
+function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const { loading, error, isAuthenticated, user } = useSelector((state) => state.user);
 
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    role: ''
-  });
-
+  const [formData, setFormData] = useState({ email: '', password: '', role: '' });
   const [showPassword, setShowPassword] = useState(false);
 
-  // Handle form input change
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value
-    }));
+    setFormData({ ...formData, [name]: value });
   };
 
-  // Handle form submit
+  const handleRoleSelect = (role) => {
+    setFormData({ ...formData, role });
+  };
+
   const handleLogin = (e) => {
     e.preventDefault();
-    // Client-side validation
-    if (!formData.role || !formData.email || !formData.password) {
-      toast.dismiss();
-      toast.error('Please fill in all fields.');
-      return;
-    }
-    dispatch(login(formData));
-  }
+    const data = new FormData();
+    Object.entries(formData).forEach(([key, val]) => data.set(key, val));
+    dispatch(login(data));
+  };
 
-  // Handle error notification
   useEffect(() => {
-    if (error) {
-      // Show toast and only clear error after toast closes
-      toast.error(error, {
-        onClose: () => dispatch(clearAllUserErrors())
-      });
+    let mounted = true;
+    
+    if (mounted && error) {
+      toast.error(error);
+      dispatch(clearAllUserErrors());
     }
-  }, [error, dispatch]);
 
-  // Redirect after successful login
+    return () => {
+      mounted = false;
+    };
+  }, [error]);
+
   useEffect(() => {
-    if (isAuthenticated && user) {
+    let mounted = true;
+    
+    if (mounted && isAuthenticated && user) {
+      toast.success('Login successful!');
+      // Store user data and token in localStorage after successful login
       localStorage.setItem('user', JSON.stringify(user));
       localStorage.setItem('token', user.token);
       navigate('/', { replace: true });
     }
-  }, [isAuthenticated, user, navigate]);
+
+    return () => {
+      mounted = false;
+    };
+  }, [isAuthenticated]);
+
 
   return (
     <section className="authPage">
@@ -66,7 +67,6 @@ const Login = () => {
           <h3>Login to your account</h3>
         </div>
         <form onSubmit={handleLogin}>
-          {/* Role Selector */}
           <div className="inputTag">
             <label>Login As</label>
             <div>
@@ -80,10 +80,9 @@ const Login = () => {
                 <option value="employer">Login as an Employer</option>
                 <option value="job seeker">Login as a Job Seeker</option>
               </select>
+              {/* You can use FaUserShield or any icon here if imported */}
             </div>
           </div>
-
-          {/* Email Input */}
           <div className="inputTag">
             <label>Email</label>
             <div>
@@ -95,10 +94,9 @@ const Login = () => {
                 name="email"
                 required
               />
+              {/* You can use MdOutlineMailOutline or any icon here if imported */}
             </div>
           </div>
-
-          {/* Password Input */}
           <div className="inputTag">
             <label>Password</label>
             <div style={{ position: 'relative', width: '100%' }}>
@@ -116,37 +114,26 @@ const Login = () => {
                 onClick={() => setShowPassword(!showPassword)}
                 className="login-password-toggle"
                 tabIndex={-1}
-                style={{
-                  position: 'absolute',
-                  right: 8,
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  background: 'none',
-                  border: 'none',
-                  padding: 0,
-                  cursor: 'pointer'
-                }}
+                style={{ position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
               >
                 {showPassword ? (
-                  <AiOutlineEyeInvisible size={20} />
+                  <svg xmlns="http://www.w3.org/2000/svg" className="login-eye" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="20" height="20"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-5.523 0-10-4.477-10-10 0-1.657.336-3.234.938-4.675M15 12a3 3 0 11-6 0 3 3 0 016 0zm6.062-4.675A9.956 9.956 0 0122 9c0 5.523-4.477 10-10 10-.828 0-1.634-.104-2.406-.3" /></svg>
                 ) : (
-                  <AiOutlineEye size={20} />
+                  <svg xmlns="http://www.w3.org/2000/svg" className="login-eye" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="20" height="20"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0zm2.21 2.21A9.956 9.956 0 0022 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 1.657.336 3.234.938 4.675M6.343 17.657A9.956 9.956 0 0112 22c5.523 0 10-4.477 10-10 0-1.657-.336-3.234-.938-4.675" /></svg>
                 )}
               </button>
+              {/* You can use RiLock2Fill or any icon here if imported */}
             </div>
+            {error && <p className="login-error">{error}</p>}
           </div>
-
-          {/* Submit Button */}
           <button type="submit" disabled={loading}>
-            {loading ? "Logging in..." : "Login"}
+            {loading ? "logging in" : "Login"}
           </button>
-
-          {/* Register Link */}
-          <Link to="/register">Register Now</Link>
+          <Link to={"/register"}>Register Now</Link>
         </form>
       </div>
     </section>
   );
-};
+}
 
 export default Login;

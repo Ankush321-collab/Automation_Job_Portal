@@ -162,12 +162,31 @@ export const login = (data) => async (dispatch) => {
       dispatch(userSlice.actions.fetchuserfailure(error.response.data.message));
     }
   };
-  export const logout = () => (dispatch) => {
-  localStorage.removeItem('user');
-  localStorage.removeItem('token');
-  dispatch(userSlice.actions.logoutsuccess());
-  dispatch(userSlice.actions.clearallerror());
-};
+  export const logout = () => async (dispatch) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/logout",
+        {},  // empty body
+        {
+          withCredentials: true,
+        }
+      );
+
+      // Clear local storage
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      
+      // Clear Redux state
+      dispatch(userSlice.actions.logoutsuccess());
+      dispatch(userSlice.actions.clearallerror());
+      
+      return Promise.resolve(response.data.message || 'Logged out successfully');
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || 'Failed to logout';
+      dispatch(userSlice.actions.logoutfailed(errorMessage));
+      return Promise.reject(errorMessage);
+    }
+  };
   
   export const clearAllUserErrors = () => (dispatch) => {
     dispatch(userSlice.actions.clearallerror());

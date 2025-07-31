@@ -1,63 +1,106 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { logout } from "../store/slice/User_slice";
+import { toast } from 'react-toastify';
 import logo from "../../public/logo.png";
 import '../styles/logo.css';
+import '../styles/navbar.css';
 
 
 const Navbar = () => {
   const [show, setShow] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const { isAuthenticated } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    dispatch(logout());
-    setShow(false);
-    navigate("/login");
+  // Handle scroll effect
+  useEffect(() => {
+    const handleScroll = () => {
+      const isScrolled = window.scrollY > 50;
+      setScrolled(isScrolled);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    
+    // Cleanup listener on component unmount
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      await dispatch(logout()).unwrap();
+      toast.success('Logged out successfully');
+      setShow(false);
+      navigate("/login");
+    } catch (error) {
+      toast.error(error || 'Failed to logout. Please try again.');
+    }
+  };
+
+  const toggleMenu = () => {
+    setShow(!show);
   };
   return (
     <>
-      <nav className={show ? "navbar show_navbar" : "navbar"}>
+      <nav className={`navbar ${show ? 'show_navbar' : ''} ${scrolled ? 'scrolled' : ''}`}>
         <div className="logo">
-          <img src={logo} alt="logo" className="navbar-logo-rounded" 
-          style={{}} />
+          <img src={logo} alt="logo" className="navbar-logo-rounded" />
           <h1>AnkushNest</h1>
         </div>
-        <div className="links">
+        <button className="hamburger" onClick={toggleMenu} aria-label="Toggle menu">
+          <GiHamburgerMenu />
+        </button>
+        <div className={`links ${show ? 'show' : ''}`}>
           <ul>
             <li>
-              <Link to={"/"} onClick={() => setShow(!show)}>
+              <Link to={"/"} onClick={() => setShow(false)}>
                 HOME
               </Link>
             </li>
-            <li>
-              <Link to={"/job"} onClick={() => setShow(!show)}>
-                JOBS
-              </Link>
-            </li>
-            {isAuthenticated ? (
+            {isAuthenticated && (
               <>
                 <li>
-                  <Link to={"/dashboard"} onClick={() => setShow(!show)}>
-                    DASHBOARD
+                  <Link to={"/job"} onClick={() => setShow(false)}>
+                    JOBS
                   </Link>
                 </li>
                 <li>
-                  <span style={{ cursor: "pointer" }} onClick={handleLogout}>
-                    Logout
-                  </span>
+                  <Link to={"/dashboard"} onClick={() => setShow(false)}>
+                    DASHBOARD
+                  </Link>
                 </li>
               </>
-            ) : (
-              <li>
-                <Link to={"/login"} onClick={() => setShow(!show)}>
+            )}
+            <li>
+              {isAuthenticated ? (
+                <button 
+                  onClick={handleLogout} 
+                  className="nav-button"
+                  style={{ 
+                    cursor: "pointer",
+                    background: "transparent",
+                    border: "none",
+                    color: "inherit",
+                    fontSize: "inherit",
+                    fontWeight: "inherit",
+                    padding: "0",
+                    display: "inline-flex",
+                    alignItems: "center"
+                  }}
+                >
+                  LOGOUT
+                </button>
+              ) : (
+                <Link to={"/login"} onClick={() => setShow(false)}>
                   LOGIN
                 </Link>
-              </li>
-            )}
+              )}
+            </li>
           </ul>
         </div>
         <GiHamburgerMenu className="hamburger" onClick={() => setShow(!show)} />

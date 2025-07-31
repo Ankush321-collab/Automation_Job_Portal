@@ -182,7 +182,7 @@ export const Job = () => {
                         <span>Posted On:</span> {elements.jobpostedon.substring(0, 10)}
                       </p>
                       <div className='btn-wrapper' style={{marginTop: 10}}>
-                        <Link to={`/api/post/${elements._id}`} className="btn" style={{fontSize: 18, padding: '10px 32px'}}>Apply Now</Link>
+                        <Link to={`/application/${elements._id}`} className="btn" style={{fontSize: 18, padding: '10px 32px'}}>Apply Now</Link>
                       </div>
                     </div>
                   )

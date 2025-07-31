@@ -139,7 +139,7 @@ export const fetchjobs=
     }
 
   }
-  export const fetchsinglejon=(jobid)=>async(dispatch)=>{
+  export const fetchsinglejob=(jobid)=>async(dispatch)=>{
     dispatch(jobSlice.actions.requestforsinglejob());
     try{
       const response=await axios.get(`http://localhost:5000/api/get/${jobid}`,{

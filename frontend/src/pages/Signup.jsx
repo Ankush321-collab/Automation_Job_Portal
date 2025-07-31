@@ -44,11 +44,12 @@ const preferencies = [
   "IT Consulting",
 ];
 
-export const Signup = () => {
-  const [showpass, setshowpass] = useState(false);
+export default function Signup() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const { loading, isAuthenticated, error } = useSelector((state) => state.user);
+  
+  const [showpass, setshowpass] = useState(false);
   const [formData, setFormData] = useState({
     fullname: "",
     role: "",
@@ -64,14 +65,8 @@ export const Signup = () => {
     resume: null,
   });
 
-  const { loading, isAuthenticated, error } = useSelector((state) => state.user);
-
   const handleChange = (e) => {
     let { name, value } = e.target;
-    // Normalize role value to match backend enum
-    if (name === "role" && value.toLowerCase() === "job seeker") {
-      value = "job seeker";
-    }
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -96,14 +91,21 @@ export const Signup = () => {
       toast.error('Passwords do not match.');
       return;
     }
+
     const data = new FormData();
+    // Format the role properly
+    const role = formData.role.toLowerCase() === "job seeker" ? "Job Seeker" : "Employer";
+    
     Object.entries(formData).forEach(([key, value]) => {
       if (key === "resume" && value) {
         data.append(key, value);
+      } else if (key === "role") {
+        data.append(key, role);
       } else {
         data.append(key, value !== undefined && value !== null ? String(value) : "");
       }
     });
+    
     dispatch(signup(data));
   };
 
@@ -113,6 +115,7 @@ export const Signup = () => {
       dispatch(clearAllUserErrors());
     }
     if (isAuthenticated) {
+      toast.success('Account created successfully!');
       navigate("/");
     }
   }, [error, isAuthenticated, dispatch, navigate]);
