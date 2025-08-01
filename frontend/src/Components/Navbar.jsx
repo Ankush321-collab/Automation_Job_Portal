@@ -49,8 +49,12 @@ const Navbar = () => {
     <>
       <nav className={`navbar ${show ? 'show_navbar' : ''} ${scrolled ? 'scrolled' : ''}`}>
         <div className="logo">
-          <img src={logo} alt="logo" className="navbar-logo-rounded" />
-          <h1>AnkushNest</h1>
+          <img src={logo} alt="logo" className="navbar-logo-rounded" 
+          onClick={() => navigate("/")} />
+          
+          <h1
+          onClick={() => navigate("/")}
+          >AnkushNest</h1>
         </div>
         <button className="hamburger" onClick={toggleMenu} aria-label="Toggle menu">
           <GiHamburgerMenu />
