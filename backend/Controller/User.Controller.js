@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import { v2 as cloudinary } from "cloudinary";
 import { sendtoken } from "../utils/jtwtoken.js";
 import { User } from "../Models/User.Schema.js";
+import path from "path";
 
 export const signup = catchasyncerror(async (req, res, next) => {
   const {
@@ -78,6 +79,8 @@ export const signup = catchasyncerror(async (req, res, next) => {
   };
 
   if (req.files && req.files.resume) {
+    // Debug logging for resume upload
+    console.log('Uploading resume:', resume.name, resume.mimetype);
     const allowedMimeTypes = [
       "application/pdf",
       "application/msword",
@@ -104,16 +107,20 @@ export const signup = catchasyncerror(async (req, res, next) => {
       api_secret: process.env.CLOUDINARY_API_SECRET,
     });
 
-    // Set resource_type based on file type
-    const resourceType = resume.mimetype.startsWith('image/') ? 'image' : 'raw';
-
+    // Preserve original filename and extension for correct download type
+    const ext = path.extname(resume.name); // e.g., '.pdf'
+    const base = path.basename(resume.name, ext);
     const cloudinaryResponse = await cloudinary.uploader.upload(
       resume.tempFilePath,
       {
         folder: "JOB_SEEKER_Resume",
-        resource_type: resourceType,
+        resource_type: "raw",
+        public_id: base,
+        format: ext.replace('.', ''),
       }
     );
+    console.log('Cloudinary resume URL:', cloudinaryResponse.secure_url);
+    console.log('Cloudinary resume format:', cloudinaryResponse.format);
 
     if (!cloudinaryResponse || cloudinaryResponse.error) {
       return next(
@@ -239,14 +246,14 @@ export const updateprofile = catchasyncerror(async (req, res, next) => {
     }
     if (req.user.resume && req.user.resume.public_id) {
       await cloudinary.uploader.destroy(req.user.resume.public_id, {
-        resource_type: resume.mimetype.startsWith('image/') ? 'image' : 'raw',
+        resource_type: "raw",
       });
     }
     const uploadedResume = await cloudinary.uploader.upload(
       resume.tempFilePath,
       {
         folder: "job_seeker_resume",
-        resource_type: resume.mimetype.startsWith('image/') ? 'image' : 'raw',
+        resource_type: "raw",
       }
     );
     newUserData.resume = {
