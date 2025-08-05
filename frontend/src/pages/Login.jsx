@@ -26,7 +26,13 @@ function Login() {
   const handleLogin = (e) => {
     e.preventDefault();
     const data = new FormData();
-    Object.entries(formData).forEach(([key, val]) => data.set(key, val));
+    Object.entries(formData).forEach(([key, val]) => {
+      if (key === 'role') {
+        data.set('role', val.toLowerCase());
+      } else {
+        data.set(key, val);
+      }
+    });
     dispatch(login(data));
   };
 
@@ -129,7 +135,7 @@ function Login() {
           <button type="submit" disabled={loading}>
             {loading ? "logging in" : "Login"}
           </button>
-          <Link to={"/register"}>Register Now</Link>
+          <Link to={"/signup"}>Register Now</Link>
         </form>
       </div>
     </section>

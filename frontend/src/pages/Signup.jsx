@@ -93,19 +93,15 @@ export default function Signup() {
     }
 
     const data = new FormData();
-    // Format the role properly
-    const role = formData.role.toLowerCase() === "job seeker" ? "Job Seeker" : "Employer";
-    
     Object.entries(formData).forEach(([key, value]) => {
       if (key === "resume" && value) {
         data.append(key, value);
       } else if (key === "role") {
-        data.append(key, role);
+        data.append(key, value.toLowerCase());
       } else {
         data.append(key, value !== undefined && value !== null ? String(value) : "");
       }
     });
-    
     dispatch(signup(data));
   };
 

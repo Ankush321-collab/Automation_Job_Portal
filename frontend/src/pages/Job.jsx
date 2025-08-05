@@ -2,7 +2,7 @@ import React, { useState,useEffect } from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import { clearAllJobErrors, fetchjobs } from '../store/slice/job_slice';
 import { toast } from "react-toastify";
-import { Spinner } from '../Components/Spinner';
+import  Spinner  from '../Components/Spinner';
 import { FaSearch } from "react-icons/fa";
 import { Link } from 'react-router-dom'
 
