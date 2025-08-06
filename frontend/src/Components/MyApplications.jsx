@@ -1,6 +1,11 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { clearAllApplicationErrors, deleteApplication, fetchJobSeekerApplications, resetApplicationSlice } from '../store/slice/application_slice';
+import {
+  clearAllApplicationErrors,
+  deleteApplication,
+  fetchJobSeekerApplications,
+  resetApplicationSlice
+} from '../store/slice/application_slice';
 import Spinner from './Spinner.jsx';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
@@ -35,7 +40,7 @@ const MyApplications = () => {
     <>
       {loading ? (
         <Spinner />
-      ) : applications && applications.length <= 0 ? (
+      ) : !Array.isArray(applications) || applications.length === 0 ? (
         <h1 style={{ fontSize: '1.4rem', fontWeight: '600' }}>
           You have not applied for any job.
         </h1>

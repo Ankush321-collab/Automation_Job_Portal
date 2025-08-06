@@ -42,8 +42,7 @@ export const Dashboard = () => {
       dispatch(fetchJobSeekerApplications());
     }
   }, [isAuthenticated, error, user, navigate, dispatch]);
-
-  return (
+    return (
     <div className="dashboard_container">
       <div className={show ? "sidebar" : "sidebar sidebar_hide"}>
         <ul>
@@ -59,12 +58,14 @@ export const Dashboard = () => {
           >
             My Applications
           </li>
+          {user && user.role==="employer" &&(
           <li
             className={component === "MyJobs" ? "active" : ""}
             onClick={() => setComponent("MyJobs")}
           >
             My Jobs
           </li>
+          )}
           <li
             className={component === "UpdateProfile" ? "active" : ""}
             onClick={() => setComponent("UpdateProfile")}
@@ -77,6 +78,16 @@ export const Dashboard = () => {
           >
             Update Password
           </li>
+
+          {user && user.role === "employer" && (
+            <li
+              className={component === "PostJob" ? "active" : ""}
+              onClick={() => setComponent("PostJob")}
+            >
+              Post New Job
+            </li>
+          )}
+
           {user && user.role === "employer" && (
             <li
               className={component === "Applications" ? "active" : ""}
@@ -104,8 +115,9 @@ export const Dashboard = () => {
           {component === "UpdateProfile" && <UpdateProfile />}
           {component === "UpdatePassword" && <UpdatePassword />}
           {component === "Applications" && <Applications />}
+          {component === "PostJob" && <PostJob />}
         </div>
       </div>
     </div>
   );
-}
+};

@@ -177,7 +177,7 @@ export const fetchjobs=
     dispatch(jobSlice.actions.requestForMyJobs());
     try {
       const response = await axios.get(
-        `https://job-portal-backend-sifx.onrender.com/api/v1/job/getmyjobs`,
+        `http://localhost:5000/api/getmyjob`,
         { withCredentials: true }
       );
       dispatch(jobSlice.actions.successForMyJobs(response.data.myJobs));
@@ -186,6 +186,25 @@ export const fetchjobs=
       dispatch(jobSlice.actions.failureForMyJobs(error.response.data.message));
     }
   };
+
+  export const deletejob= (id) =>async(dispatch)=>{
+    dispatch(jobSlice.actions.requestForDeleteJob());
+
+  
+  try{
+    const response=await axios.delete(`http://localhost:5000/api/delete/${id}`,{
+      withCredentials:true
+    });
+    dispatch(jobSlice.actions.successForDeleteJob(response.data.message))
+;
+dispatch(clearAllJobErrors());
+  }
+  catch(error){
+    dispatch(jobSlice.actions.failureForDeleteJob(error.response.data.message));
+
+  }
+
+}
   export const clearAllJobErrors = () => (dispatch) => {
     dispatch(jobSlice.actions.clearAllErrors());
   };

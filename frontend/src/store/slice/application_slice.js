@@ -101,7 +101,7 @@ export const fetchJobSeekerApplications = () => async (dispatch) => {
     dispatch(applicationSlice.actions.requestForMyApplications());
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/jobseeker/getall`,
+        `http://localhost:5000/api/jobseeker/getallapplication`,
         {
           withCredentials: true,
         }

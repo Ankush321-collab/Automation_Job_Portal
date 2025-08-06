@@ -78,13 +78,11 @@ export const updatePassword = (data) => async (dispatch) => {
   }
 };
 
-<<<<<<< HEAD
 
-=======
 export const clearAllUpdateProfileErrors = () => (dispatch) => {
   dispatch(updateProfileSlice.actions.profileResetAfterUpdate());
 };
->>>>>>> 91e4983ac3aa44d8110b034f7c26c4546bf70f7b
+
 
 export const clearAllUpdateProfileError = () => (dispatch) => {
   dispatch(updateProfileSlice.actions.profileResetAfterUpdate());
