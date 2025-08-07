@@ -10,7 +10,7 @@ const jobSlice=createSlice({
         error:null,
         message:null,
         singlejob:{},
-        myjob:{}
+        myjob:[]
     },
     reducers:{
         requestforalljobs(state,action){
@@ -162,7 +162,6 @@ export const fetchjobs=
     try{
       const response=await axios.post(`http://localhost:5000/api/postjob`,data,{
         withCredentials:true,
-        headers:{"Content-Type":"application/json"}
       })
       dispatch(jobSlice.actions.successForPostJob(response.data.message));
 

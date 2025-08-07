@@ -41,7 +41,7 @@ export const Dashboard = () => {
     if (user && user.role === "job seeker") {
       dispatch(fetchJobSeekerApplications());
     }
-  }, [isAuthenticated, error, user, navigate, dispatch]);
+  }, [ error, user, dispatch]);
     return (
     <div className="dashboard_container">
       <div className={show ? "sidebar" : "sidebar sidebar_hide"}>
@@ -52,12 +52,14 @@ export const Dashboard = () => {
           >
             My Profile
           </li>
+          {user && user.role==="job seeker" &&(
           <li
             className={component === "MyApplications" ? "active" : ""}
             onClick={() => setComponent("MyApplications")}
           >
             My Applications
           </li>
+          )}
           {user && user.role==="employer" &&(
           <li
             className={component === "MyJobs" ? "active" : ""}

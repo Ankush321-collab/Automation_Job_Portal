@@ -26,8 +26,9 @@ const MyJobs = () => {
     if (message) {
       toast.success(message);
       dispatch(resetJobSlice());
+      dispatch(getmyjob());
+
     }
-    dispatch(getmyjob());
   }, [dispatch, error, message]);
 
   const handledeltejob = (id) => {
@@ -49,7 +50,7 @@ const MyJobs = () => {
             {jobsData.map((element) => (
               <div className="card" key={element._id}>
                 <p className="sub-sec"><span>Job Title:</span> {element.title}</p>
-                <p className="sub-sec"><span>Job Preference:</span> {element.jobNiche}</p>
+                <p className="sub-sec"><span>Job Preference:</span> {element.preference}</p>
                 <p className="sub-sec"><span>Salary:</span> {element.salary}</p>
                 <p className="sub-sec"><span>Location:</span> {element.location}</p>
                 <p className="sub-sec"><span>Job Type:</span> {element.jobtype}</p>

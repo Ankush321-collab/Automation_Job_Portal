@@ -1,4 +1,7 @@
 import { Route, Routes } from 'react-router-dom'
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { getUser } from './store/slice/User_slice';
 import Home from './pages/Home'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
@@ -16,6 +19,10 @@ import "./App.css"
 
 
 function App() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getUser());
+  }, [dispatch]);
   return (
     <>
       <ToastContainer

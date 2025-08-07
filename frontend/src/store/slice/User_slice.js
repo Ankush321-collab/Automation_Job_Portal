@@ -159,7 +159,7 @@ export const login = (data) => async (dispatch) => {
       dispatch(userSlice.actions.fetchusersuccess(response.data.user));
       dispatch(userSlice.actions.clearallerror());
     } catch (error) {
-      dispatch(userSlice.actions.fetchuserfailure(error.response.data.message));
+      dispatch(userSlice.actions.fetchuserfailure(error.response.data.message || "something went wrong"));
     }
   };
   export const logout = () => async (dispatch) => {

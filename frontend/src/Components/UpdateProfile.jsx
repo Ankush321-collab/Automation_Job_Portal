@@ -19,11 +19,11 @@ const isUpdated = useSelector((state) => state.updateprofile.isUpdated);
   const [phone, setphone] = useState(user && user.phone);
   const [address, setaddress] = useState(user && user.address);
   const [coverletter, setcoverletter] = useState(user && user.coverletter);
-  const [first_preference, setfirst_preference] = useState(user && user.first_preference);
-  const [second_preference, setsecond_preference] = useState(user && user.second_preference);
-  const [third_preference, setthird_preference] = useState(user && user.third_preference);
+  const [first_preference, setfirst_preference] = useState(user?.preference?.first_preference || "");
+  const [second_preference, setsecond_preference] = useState(user?.preference?.second_preference || "");
+  const [third_preference, setthird_preference] = useState(user?.preference?.third_preference || "");
   const [resume, setresume] = useState(null);
-  const [resumepreview, setresumepreview] = useState(user && user.resume);
+  const [resumepreview, setresumepreview] = useState(user?.resume?.url || "");
 
   const handleupdateprofile = (e) => {
     e.preventDefault();
