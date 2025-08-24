@@ -18,6 +18,11 @@ const MyJobs = () => {
   // Always ensure myjob is an array before using it
   const jobsData = Array.isArray(myjob) ? myjob : [];
 
+  // Fetch my jobs on mount
+  useEffect(() => {
+    dispatch(getmyjob());
+  }, [dispatch]);
+
   useEffect(() => {
     if (error) {
       toast.error(error);
@@ -27,7 +32,6 @@ const MyJobs = () => {
       toast.success(message);
       dispatch(resetJobSlice());
       dispatch(getmyjob());
-
     }
   }, [dispatch, error, message]);
 

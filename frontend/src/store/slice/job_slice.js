@@ -179,7 +179,7 @@ export const fetchjobs=
         `http://localhost:5000/api/getmyjob`,
         { withCredentials: true }
       );
-      dispatch(jobSlice.actions.successForMyJobs(response.data.myJobs));
+      dispatch(jobSlice.actions.successForMyJobs(response.data.jobs));
       dispatch(jobSlice.actions.clearAllErrors());
     } catch (error) {
       dispatch(jobSlice.actions.failureForMyJobs(error.response.data.message));
@@ -194,13 +194,11 @@ export const fetchjobs=
     const response=await axios.delete(`http://localhost:5000/api/delete/${id}`,{
       withCredentials:true
     });
-    dispatch(jobSlice.actions.successForDeleteJob(response.data.message))
-;
-dispatch(clearAllJobErrors());
+    dispatch(jobSlice.actions.successForDeleteJob(response.data.message));
+    dispatch(clearAllJobErrors());
   }
   catch(error){
     dispatch(jobSlice.actions.failureForDeleteJob(error.response.data.message));
-
   }
 
 }

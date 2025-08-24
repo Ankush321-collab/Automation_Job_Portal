@@ -102,13 +102,13 @@ export const getalljobs=catchasyncerror(async(req,res,next)=>{
 });
 
     export const getmyjob=catchasyncerror(async(req,res,next)=>{
-        const myjob=await Job.find({
-            postedby:req.user._id
-        })
-        res.status(200).json({
-            success:true,
-            myjob
-        })
+    const jobs=await Job.find({
+      postedby:req.user._id
+    })
+    res.status(200).json({
+      success:true,
+      jobs
+    })
     })
 
     export const deletejob=catchasyncerror(async(req,res,next)=>{
