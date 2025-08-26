@@ -30,9 +30,10 @@ app.use(cors({
   origin: [
     "https://automation-job-portal.vercel.app",
   ],
-
-  credentials: true, // ✅ corrected key
+  credentials: true,
   methods: ["GET", "POST", "DELETE", "PUT"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  exposedHeaders: ["set-cookie"]
 }));
 app.use(
   fileUpload({
