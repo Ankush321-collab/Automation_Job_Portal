@@ -11,7 +11,7 @@ import { Job } from './pages/Job'
 import { PostApplication } from './pages/PostApplication'
 import Navbar from './Components/Navbar'
 import Footer from './Components/Footer'
-import { ProtectedRoute } from './components/ProtectedRoute'
+import { ProtectedRoute } from './Components/ProtectedRoute'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import "./App.css"
