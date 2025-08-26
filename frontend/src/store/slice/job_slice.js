@@ -111,7 +111,7 @@ export const fetchjobs=
 
     try{
       dispatch(jobSlice.actions.requestforalljobs());
-      let link="http://localhost:5000/api/getalljobs?"
+      let link="https://automation-job-portal.onrender.com/api/getalljobs?"
       let query=[];
       if(keyword){
         query.push(`keyword=${keyword}`)
@@ -142,7 +142,7 @@ export const fetchjobs=
   export const fetchsinglejob=(jobid)=>async(dispatch)=>{
     dispatch(jobSlice.actions.requestforsinglejob());
     try{
-      const response=await axios.get(`http://localhost:5000/api/get/${jobid}`,{
+      const response=await axios.get(`https://automation-job-portal.onrender.com/api/get/${jobid}`,{
         withCredentials:true,
       })
       dispatch(jobSlice.actions.successforsinglejob(response.data.job))
@@ -160,7 +160,7 @@ export const fetchjobs=
     dispatch(jobSlice.actions.requestForPostJob());
 
     try{
-      const response=await axios.post(`http://localhost:5000/api/postjob`,data,{
+      const response=await axios.post(`https://automation-job-portal.onrender.com/api/postjob`,data,{
         withCredentials:true,
       })
       dispatch(jobSlice.actions.successForPostJob(response.data.message));
@@ -176,7 +176,7 @@ export const fetchjobs=
     dispatch(jobSlice.actions.requestForMyJobs());
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/getmyjob`,
+        `https://automation-job-portal.onrender.com/api/getmyjob`,
         { withCredentials: true }
       );
       dispatch(jobSlice.actions.successForMyJobs(response.data.jobs));
@@ -191,7 +191,7 @@ export const fetchjobs=
 
   
   try{
-    const response=await axios.delete(`http://localhost:5000/api/delete/${id}`,{
+    const response=await axios.delete(`https://automation-job-portal.onrender.com/api/delete/${id}`,{
       withCredentials:true
     });
     dispatch(jobSlice.actions.successForDeleteJob(response.data.message));
