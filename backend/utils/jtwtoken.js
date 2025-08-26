@@ -11,6 +11,9 @@ export const sendtoken = (user, statuscode, res, message) => {
             Date.now() + process.env.COOKIE_EXPIRE * 24 * 60 * 60 * 1000
         ),
         httpOnly: true,
+        secure: true,
+        sameSite: 'none',
+        path: '/',
     };
 
     res.status(statuscode).cookie("token", token, options).json({

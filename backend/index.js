@@ -26,14 +26,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+// CORS configuration
 app.use(cors({
-  origin: [
-    process.env.FRONTEND_URL,
-  ],
+  origin: 
+    "*",
   credentials: true,
-  methods: ["GET", "POST", "DELETE", "PUT"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  exposedHeaders: ["set-cookie"]
+  methods: ["GET", "POST", "DELETE", "PUT", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
+  exposedHeaders: ["set-cookie"],
 }));
 app.use(
   fileUpload({
@@ -47,6 +47,25 @@ app.use('/api',applicationrouter)
 app.get("/", (req, res) => {
   res.send("Hello from backend");
 });
+
+// Global error handler
+app.use((err, req, res, next) => {
+  console.error('Error:', err);
+  res.status(err.statuscode || 500).json({
+    success: false,
+    message: err.message || "Internal Server Error",
+    stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
+  });
+});
+
+// Handle unhandled promise rejections
+process.on('unhandledRejection', (err) => {
+  console.log('UNHANDLED REJECTION! 💥 Shutting down...');
+  console.error('Error:', err);
+  // Close server & exit process
+  process.exit(1);
+});
+
 newsLetterCron();
 
 const mongoUrl = process.env.MONGO_URL;
