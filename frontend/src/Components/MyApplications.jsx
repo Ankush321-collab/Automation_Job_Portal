@@ -51,24 +51,24 @@ const MyApplications = () => {
             {applications.map((element) => (
               <div className="card" key={element._id}>
                 <p className="sub-sec">
-                  <span>Job Title: </span> {element.job.jobtitle}
+                  <span>Job Title: </span> {element.jobinfo?.jobTitle}
                 </p>
                 <p className="sub-sec">
-                  <span>Name: </span> {element.jobSeekerInfo.name}
+                  <span>Name: </span> {element.jobseekerinfo?.fullname}
                 </p>
                 <p className="sub-sec">
-                  <span>Email: </span> {element.jobSeekerInfo.email}
+                  <span>Email: </span> {element.jobseekerinfo?.email}
                 </p>
                 <p className="sub-sec">
-                  <span>Phone: </span> {element.jobSeekerInfo.phone}
+                  <span>Phone: </span> {element.jobseekerinfo?.phone}
                 </p>
                 <p className="sub-sec">
-                  <span>Address: </span> {element.jobSeekerInfo.address}
+                  <span>Address: </span> {element.jobseekerinfo?.address}
                 </p>
                 <p className="sub-sec">
                   <span>Coverletter: </span>
                   <textarea
-                    value={element.jobSeekerInfo.coverLetter}
+                    value={element.jobseekerinfo?.coverletter || ""}
                     rows={5}
                     disabled
                   ></textarea>
@@ -81,7 +81,7 @@ const MyApplications = () => {
                     Delete Application
                   </button>
                   <Link
-                    to={element.jobSeekerInfo.resume.url}
+                    to={element.jobseekerinfo?.resume?.url || "#"}
                     className="btn"
                     target="_blank"
                     rel="noreferrer"

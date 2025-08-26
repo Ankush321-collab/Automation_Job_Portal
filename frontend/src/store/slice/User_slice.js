@@ -116,7 +116,7 @@ export const signup=(data)=>async(dispatch)=>{
         };
         
         const response = await axios.post(
-            "https://automation-job-portal.onrender.com/api/signup",
+            "http://localhost:5000/api/signup",
             data,
             config
         );
@@ -133,7 +133,7 @@ export const login = (data) => async (dispatch) => {
     dispatch(userSlice.actions.loginrequest());
     try {
       const response = await axios.post(
-        "https://automation-job-portal.onrender.com/api/login",
+        "http://localhost:5000/api/login",
         data,
         {
           withCredentials: true,
@@ -151,7 +151,7 @@ export const login = (data) => async (dispatch) => {
     dispatch(userSlice.actions.fetchuserrequest());
     try {
       const response = await axios.get(
-        "https://automation-job-portal.onrender.com/api/alluser",
+        "http://localhost:5000/api/alluser",
         {
           withCredentials: true,
         }
@@ -165,7 +165,7 @@ export const login = (data) => async (dispatch) => {
   export const logout = () => async (dispatch) => {
     try {
       const response = await axios.post(
-        "https://automation-job-portal.onrender.com/api/logout",
+        "http://localhost:5000/api/logout",
         {},  // empty body
         {
           withCredentials: true,
