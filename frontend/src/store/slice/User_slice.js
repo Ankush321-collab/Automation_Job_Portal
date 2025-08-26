@@ -156,7 +156,7 @@ export const login = (data) => async (dispatch) => {
           withCredentials: true,
         }
       );
-      dispatch(userSlice.actions.fetchusersuccess(response.data.user));
+      dispatch(userSlice.actions.fetchusersuccess(response.data.users));
       dispatch(userSlice.actions.clearallerror());
     } catch (error) {
       dispatch(userSlice.actions.fetchuserfailure(error.response.data.message || "something went wrong"));
