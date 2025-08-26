@@ -27,7 +27,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use(cors({
-  origin: process.env.FRONTEND_URL,
+  origin: process.env.FRONTEND_URL || "https://automation-job-portal-12.onrender.com/",
   credentials: true, // ✅ corrected key
   methods: ["GET", "POST", "DELETE", "PUT"],
 }));
