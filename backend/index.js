@@ -28,7 +28,7 @@ app.use(cookieParser());
 
 app.use(cors({
   origin: [
-    "https://automation-job-portal.vercel.app" || "http://localhost:5173",
+    process.env.FRONTEND_URL,
   ],
   credentials: true,
   methods: ["GET", "POST", "DELETE", "PUT"],
