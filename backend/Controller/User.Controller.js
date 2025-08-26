@@ -79,6 +79,7 @@ export const signup = catchasyncerror(async (req, res, next) => {
   };
 
   if (req.files && req.files.resume) {
+    const resume = req.files.resume;
     // Debug logging for resume upload
     console.log('Uploading resume:', resume.name, resume.mimetype);
     const allowedMimeTypes = [
@@ -90,7 +91,6 @@ export const signup = catchasyncerror(async (req, res, next) => {
       "image/jpg",
       "image/gif"
     ];
-    const resume = req.files.resume;
 
     if (!allowedMimeTypes.includes(resume.mimetype)) {
       return next(

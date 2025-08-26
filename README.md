@@ -1,5 +1,5 @@
 # Automation Job Portal
-# Overview
+# 
 Automation Job Portal is a full-stack web application for job seekers and employers. It allows employers to post jobs and manage applications, while job seekers can search, apply, and manage their profiles.
 
 ---
