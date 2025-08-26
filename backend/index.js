@@ -29,9 +29,9 @@ app.use(cookieParser());
 app.use(cors({
   origin: [
     "http://localhost:5173",
-    "https://automation-job-portal-12.onrender.com"
   ],
-  credentials: true,
+
+  credentials: true, // ✅ corrected key
   methods: ["GET", "POST", "DELETE", "PUT"],
 }));
 app.use(
