@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
-import axios from "axios";
+import api from '../../services/api';
 
 
 const userSlice=createSlice({
@@ -116,7 +116,7 @@ export const signup=(data)=>async(dispatch)=>{
         };
         
         const response = await axios.post(
-            "https://automation-job-portal.onrender.com/api/signup",
+            "https://automation-job-portal-h254.onrender.com/api/signup",
             data,
             config
         );
@@ -133,7 +133,7 @@ export const login = (data) => async (dispatch) => {
     dispatch(userSlice.actions.loginrequest());
     try {
       const response = await axios.post(
-        "https://automation-job-portal.onrender.com/api/login",
+        "https://automation-job-portal-h254.onrender.com/api/login",
         data,
         {
           withCredentials: true,
@@ -150,12 +150,7 @@ export const login = (data) => async (dispatch) => {
   export const getUser = () => async (dispatch) => {
     dispatch(userSlice.actions.fetchuserrequest());
     try {
-      const response = await axios.get(
-        "https://automation-job-portal.onrender.com/api/alluser",
-        {
-          withCredentials: true,
-        }
-      );
+      const response = await api.get('/alluser');
       dispatch(userSlice.actions.fetchusersuccess(response.data.users));
       dispatch(userSlice.actions.clearallerror());
     } catch (error) {
@@ -164,13 +159,7 @@ export const login = (data) => async (dispatch) => {
   };
   export const logout = () => async (dispatch) => {
     try {
-      const response = await axios.post(
-        "https://automation-job-portal.onrender.com/api/logout",
-        {},  // empty body
-        {
-          withCredentials: true,
-        }
-      );
+      const response = await api.post('/logout');
 
       // Clear local storage
       localStorage.removeItem('token');

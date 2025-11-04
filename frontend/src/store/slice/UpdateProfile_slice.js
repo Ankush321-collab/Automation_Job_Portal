@@ -47,7 +47,7 @@ export const updateProfile = (data) => async (dispatch) => {
   dispatch(updateProfileSlice.actions.updateProfileRequest());
   try {
     const response = await axios.put(
-      "https://automation-job-portal.onrender.com/api/updateprofile",
+      "https://automation-job-portal-h254.onrender.com/api/updateprofile",
       data,
       {
         withCredentials: true,
@@ -67,7 +67,7 @@ export const updateProfile = (data) => async (dispatch) => {
 export const updatePassword = (data) => async (dispatch) => {
   dispatch(updateProfileSlice.actions.updatePasswordRequest());
   try {
-    const response = await axios.put("https://automation-job-portal.onrender.com/api/updatepassword", data, {
+    const response = await axios.put("https://automation-job-portal-h254.onrender.com/api/updatepassword", data, {
       withCredentials: true,
     });
     dispatch(updateProfileSlice.actions.updatePasswordSuccess());
